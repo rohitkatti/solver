@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "env-check",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/env_check.sh",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "bootstrap",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/bootstrap_install.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "gen-protos-cpp",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/gen_proto.sh cpp",
+            "dependsOn": "env-check",
+            "problemMatcher": []
+        },
+        {
+            "label": "build-backend",
+            "type": "shell",
+            "command": "make bld",
+            "dependsOn": "gen-protos-cpp",
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

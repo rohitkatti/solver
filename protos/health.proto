@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package health.v1;
+
+message Response {
+  bool healthy = 1;
+}
+
+// Health service definition for checking the health of the service
+service Health {
+  // Modules call this to check if the service is healthy
+  rpc Check(google.protobuf.Empty) returns (Response);
+}

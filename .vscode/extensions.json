@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        // C/C++ tooling
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
+        "llvm-vs-code-extensions.vscode-clangd",
+        // Protobuf / gRPC
+        "sankethdev.vscode-proto",
+        // Go
+        "golang.go",
+        "golang.tools",
+        "golangci.golangci-lint",
+        "eamodio.gitlens"
+    ]
+}

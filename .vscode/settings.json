@@ -1,0 +1,62 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/backend",
+    "cmake.buildDirectory": "${workspaceFolder}/backend/out/${buildType}",
+    "cmake.generator": "Ninja",
+    "cmake.configureArgs": [
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    // CPP
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--header-insertion=iwyu",
+        "--suggest-missing-includes",
+        "--compile-commands-dir=${workspaceFolder}/backend/out"
+    ],
+    "[cpp]": {
+        "editor.tabSize": 4,
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    },
+    // CMake
+    "cmake.buildBeforeRun": false,
+    "[cmake]": {
+        "editor.tabSize": 2
+    },
+    // Go
+    "go.lintOnSave": "package",
+    "go.lintTool": "golangci-lint",
+    "go.useLanguageServer": true,
+    "go.languageServerFlags": [
+        "-logfile=auto",
+        "-rpc.trace"
+    ],
+    "go.formatTool": "goimports",
+    "[go]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "golang.go",
+        "editor.codeActionsOnSave": {
+            "source.sort.json": "explicit"
+        }
+    },
+    // Shell scripts
+    "[shellscript]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true
+    }
+}
