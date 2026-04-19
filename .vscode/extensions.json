@@ -12,6 +12,7 @@
         "golang.go",
         "golang.tools",
         "golangci.golangci-lint",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "bbenoist.qml"
     ]
 }

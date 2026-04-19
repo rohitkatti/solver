@@ -205,7 +205,9 @@ endfunction()
 add_auto_library(NAME utilities
     LIBS CLI11::CLI11 rang project_proto
 )
-
+add_auto_library(NAME typedefs
+    LIBS CGAL::CGAL Eigen3::Eigen rbdl
+)
 set_target_properties(utilities PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # add_auto_library(NAME geometry

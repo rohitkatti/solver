@@ -1,0 +1,9 @@
+IndentWidth: 4
+TabWidth: 4
+UseTab: ForIndentation
+NamespaceIndentation: All
+ShortNamespaceLines: 0
+AccessModifierOffset: -4
+IndentAccessModifiers: true
+ContinuationIndentWidth: 4
+AllowShortFunctionsOnASingleLine: None

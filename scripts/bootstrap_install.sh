@@ -38,6 +38,7 @@ install_if_missing cgal
 install_if_missing eigen
 install_if_missing postgresql@18
 install_if_missing qt
+install_if_missing clang-format
 
 # Optional but recommended
 install_if_missing protobuf

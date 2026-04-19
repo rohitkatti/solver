@@ -1,0 +1,6 @@
+# /workspace/.clangd
+CompileFlags:
+  Add:
+    - -I/opt/grpc/include
+    - -I/workspace/build/proto_gen
+    - -I/workspace/src

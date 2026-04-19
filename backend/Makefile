@@ -66,3 +66,6 @@ clean:
 
 # Full rebuild
 rebuild: clean build
+
+clang-format: ## Format C++ code
+	find src -name "*.hpp" -o -name "*.cpp" | xargs clang-format -i

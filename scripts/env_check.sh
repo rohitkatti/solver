@@ -21,6 +21,7 @@ check clangd
 check go
 check node
 check qt
+check clang-format
 
 # gRPC / protobuf toolchain
 check protoc
