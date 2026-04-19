@@ -17,6 +17,14 @@
             "problemMatcher": []
         },
         {
+            "label": "bootstrap",
+            "type": "shell",
+            "command": "./scripts/bootstrap.sh",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
             "label": "gen-protos-cpp",
             "type": "shell",
             "command": "${workspaceFolder}/scripts/gen_proto.sh cpp",

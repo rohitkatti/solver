@@ -13,8 +13,7 @@
                 "CMAKE_PREFIX_PATH": "/opt/homebrew",
                 "PostgreSQL_ROOT": "/opt/homebrew/opt/postgresql@18",
                 "PostgreSQL_INCLUDE_DIR": "/opt/homebrew/include/postgresql@18",
-                "PostgreSQL_LIBRARY": "/opt/homebrew/lib/postgresql@18/libpq.dylib",
-                "EIGEN3_INCLUDE_DIR": "/opt/homebrew/Cellar/eigen/5.0.1/include/eigen3"
+                "PostgreSQL_LIBRARY": "/opt/homebrew/lib/postgresql@18/libpq.dylib"
             }
         },
         {
@@ -29,8 +28,7 @@
                 "CMAKE_PREFIX_PATH": "/opt/homebrew",
                 "PostgreSQL_ROOT": "/opt/homebrew/opt/postgresql@18",
                 "PostgreSQL_INCLUDE_DIR": "/opt/homebrew/include/postgresql@18",
-                "PostgreSQL_LIBRARY": "/opt/homebrew/lib/postgresql@18/libpq.dylib",
-                "EIGEN3_INCLUDE_DIR": "/opt/homebrew/Cellar/eigen/5.0.1/include/eigen3"
+                "PostgreSQL_LIBRARY": "/opt/homebrew/lib/postgresql@18/libpq.dylib"
             }
         }
     ]

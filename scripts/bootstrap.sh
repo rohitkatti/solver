@@ -1,21 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
-echo "Bootstrapping Project ..."
+echo "🚀 Bootstrapping Project..."
 
-echo "Setting up backend config ..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# 1. Install system deps
+"$SCRIPT_DIR/bootstrap_install.sh"
+
+# 2. Setup env
 PROJECT_ROOT=$(pwd)
-PROJECT_BACKEND_ROOT="${PROJECT_ROOT}/backend"
-PROJECT_TESTBED_ROOT="${PROJECT_ROOT}/testbed"
+PROJECT_BACKEND_ROOT=${PROJECT_ROOT}/backend
 
-export PROJECT_ROOT
-export PROJECT_BACKEND_ROOT
+mkdir -p ${PROJECT_BACKEND_ROOT}/out
+mkdir -p ${PROJECT_BACKEND_ROOT}/tmp
 
-mkdir -p "${PROJECT_BACKEND_ROOT}/tmp"
-
-if [ ! -f "${PROJECT_BACKEND_ROOT}/.env" ]; then 
-    cp "${PROJECT_BACKEND_ROOT}/.env.example" "${PROJECT_BACKEND_ROOT}/.env"
+if [ ! -f ${PROJECT_BACKEND_ROOT}/.env ]; then
+    if [ -f ${PROJECT_BACKEND_ROOT}/.env.example ]; then
+        cp ${PROJECT_BACKEND_ROOT}/.env.example ${PROJECT_BACKEND_ROOT}/.env
+    fi
 fi
 
-echo "Done setting backend !"
-echo "That's all folks! Happy Hacking :)"
+echo "✅ Bootstrap complete"
+echo " That's all folks !!! "

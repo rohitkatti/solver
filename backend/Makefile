@@ -10,13 +10,14 @@ BUILD_TYPE ?= Debug
 # ─────────────────────────────────────────────────────────────
 # Targets
 # ─────────────────────────────────────────────────────────────
-.PHONY: help init configure build clean test rebuild env-check bootstrap configure
+.PHONY: help init configure build run clean test rebuild env-check bootstrap configure
 
 help:
 	@echo "Available commands:"
 	@echo "  make init       - create folders"
 	@echo "  make configure  - run cmake configure"
 	@echo "  make build      - build project"
+	@echo "  make run      - run project"
 	@echo "  make test       - run tests"
 	@echo "  make clean      - clean build artifacts"
 	@echo "  make rebuild    - clean + build"
@@ -46,6 +47,11 @@ configure: init
 build: configure
 	@echo "Building project..."
 	$(CMAKE) --build $(BUILD_DIR)
+
+# Run the executable
+run: build
+	@echo "Running Workspace..."
+	./$(BUILD_DIR)/Workspace
 
 # Run tests
 test: build

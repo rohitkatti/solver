@@ -1,55 +1,47 @@
 #!/usr/bin/env bash
 set -e
-echo "🚀 Installing missing dependencies..."
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "Detected macOS"
-    if ! command -v brew >/dev/null; then
-        echo "❌ Homebrew required"
-        exit 1
-    fi
+echo "🔍 Checking system dependencies..."
 
-    brew install \
-        cmake \
-        ninja \
-        git \
-        go \
-        node \
-        llvm \
-        grpcurl \
-        grpc \
-        protobuf \
-        postgresql \
-        eigen \
-        cgal \
-        doxygen
+# ─────────────────────────────────────────────
+# Helper: check brew
+# ─────────────────────────────────────────────
+if ! command -v brew &> /dev/null; then
+    echo "❌ Homebrew not found. Installing..."
 
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo "Detected Linux"
-    sudo apt-get update
-    sudo apt-get install -y \
-        build-essential \
-        cmake \
-        ninja-build \
-        git \
-        curl \
-        clang \
-        clangd \
-        gdb \
-        lldb \
-        nodejs \
-        npm \
-        golang-go \
-        libgrpc-dev \
-        libprotobuf-dev \
-        protobuf-compiler \
-        protobuf-compiler-grpc \
-        libpq-dev \
-        libeigen3-dev \
-        doxygen
-else
-    echo "Unsupported OS"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    echo "⚠️ Restart your terminal after brew install"
     exit 1
 fi
 
-echo "✔ Done installing base dependencies"
+# ─────────────────────────────────────────────
+# Helper function
+# ─────────────────────────────────────────────
+install_if_missing() {
+    PKG=$1
+
+    if brew list --versions "$PKG" > /dev/null; then
+        echo "✅ $PKG already installed"
+    else
+        echo "⬇️ Installing $PKG..."
+        brew install "$PKG"
+    fi
+}
+
+# ─────────────────────────────────────────────
+# Core dependencies
+# ─────────────────────────────────────────────
+install_if_missing cmake
+install_if_missing ninja
+install_if_missing cgal
+install_if_missing eigen
+install_if_missing postgresql@18
+install_if_missing qt
+
+# Optional but recommended
+install_if_missing protobuf
+install_if_missing grpc
+install_if_missing pkg-config
+
+echo "🎉 All dependencies satisfied!"

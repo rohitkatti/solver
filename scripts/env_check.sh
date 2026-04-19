@@ -20,6 +20,7 @@ check clang
 check clangd
 check go
 check node
+check qt
 
 # gRPC / protobuf toolchain
 check protoc
