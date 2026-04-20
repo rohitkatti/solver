@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package dynamics.v1;
+
+service ModelService {
+    // creates a model
+    rpc Create(Model) returns (Response);
+
+    // center of mass
+    rpc CenterOfMass(Model) returns (Response);
+
+    // potential energy
+    rpc PotentialEnergy(Model) returns (Response);
+
+    // kinetic energy
+    rpc KineticEnergy(Model) returns (Response);
+
+    // binds a constraint
+    rpc Bind(Constraint) returns (Response);
+}
+
+service BodyService {
+    // creates a body
+    rpc Create(Body) returns (Response);
+
+    // center of mass
+    rpc CenterOfMass(Body) returns (Response);
+
+    // creates a composite body
+    rpc Join(CompositeBody) returns (Response);
+}
+
+service FrameService {
+
+}
+
+service ConstraintService {
+    
+}
+
+message Model {
+    string id = 1;
+    float gravity = 2;
+    repeated Body bodies = 3;
+}
+
+message Body {
+    string id = 1;
+    float mass = 2;
+}
+
+message Constraint {
+    string id = 1;
+}
+
+message CompositeBody {
+    Body a = 1;
+    Body b = 2; 
+}
+
+message Response {
+
+}

@@ -7,9 +7,22 @@ PROTO_FILES=$(find "${PROTO_SRC}" -name "*.proto")
 
 # ── C++ ──────────────────────────────────────────────────────────────────────
 gen_cpp() {
-    local OUT="${REPO_ROOT}/backend/src/protos"
-    mkdir -p "${OUT}"
     for f in ${PROTO_FILES}; do
+        # Extract package line, e.g. "dynamics.v1"
+        pkg=$(grep -m1 '^package ' "${f}" | sed 's/^package //;s/;//;s/ //')
+
+        if [[ -z "${pkg}" ]]; then
+            echo "ERROR: ${f} has no package declaration" >&2
+            exit 1
+        fi
+
+        # Split into name and version: dynamics.v1 → "dynamics" and "v1"
+        pkg_name="${pkg%%.*}"       # everything before first dot
+        pkg_version="${pkg##*.}"    # everything after last dot
+
+        local OUT="${REPO_ROOT}/backend/src/${pkg_name}/generated/${pkg_version}"
+        mkdir -p "${OUT}"
+
         protoc \
             --proto_path="${PROTO_SRC}" \
             --cpp_out="${OUT}" \
@@ -17,8 +30,7 @@ gen_cpp() {
             --plugin=protoc-gen-grpc="$(which grpc_cpp_plugin)" \
             "${f}"
     done
-    
-    echo "[proto] C++ → backend/src/protos/"
+    echo "[proto] C++ → src/<package>/generated/<version>/"
 }
 
 # # ── Go (future) ───────────────────────────────────────────────────────────────

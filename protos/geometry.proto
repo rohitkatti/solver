@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package geometry.v1;
+
+service FileService {
+    // load file
+    rpc Load(FileRequest) returns (LoadResponse);
+    rpc LoadPoints(FileRequest) returns (stream Point);
+}
+
+enum FileType {
+    FT_UNDEFINED = 0;
+    FT_STL = 1; // STereoLithography (STL) File Format (.stl)
+    FT_OFF = 2; // Object File Format (OFF) (.off)
+    FT_OBJ = 3; // Wavefront Advanced Visualizer Object Format (.obj)
+    FT_PLY = 4; // Polygon File Format (PLY) (.ply)
+    FT_TS  = 5; // GOCAD (TS) File Format (.ts)
+    FT_VTP = 6; // VTK (VTU / VTP / legacy) File Formats (.vtp)
+}
+
+message FileRequest {
+    FileType type = 1;
+    string path = 2;
+}
+
+message Point {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+message LoadResponse {
+    string message = 1;
+    repeated Point points = 2;
+}
+

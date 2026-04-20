@@ -5,6 +5,7 @@
 #include <dynamics/typedefs.hpp>
 #include <utilities/interface.hpp>
 #include <utilities/logger.hpp>
+#include <protos/interface.hpp>
 
 void parseArgs(int argc, char *argv[]) {
 	Utilities::Config cfg = Utilities::GetConfig();
@@ -21,10 +22,6 @@ void parseArgs(int argc, char *argv[]) {
 }
 
 int main(int argc, char **argv) {
-	// QGuiApplication app(argc, argv);
-	// QQmlApplicationEngine engine;
-	// engine.loadFromModule("com.myapp", "Main");
-	// return app.exec();
 	parseArgs(argc, argv);
 
 	Utilities::Config cfg = Utilities::GetConfig();
@@ -33,6 +30,16 @@ int main(int argc, char **argv) {
 	Utilities::SetConfig(cfg);
 
 	Utilities::FL().Info("\n\nInitialization Done !\n\n");
+
+	Protos::Service svc;
+	// std::thread serverThread(svc.RunServer);
+	svc.RunServer();
+
+		// QGuiApplication app(argc, argv);
+	// QQmlApplicationEngine engine;
+	// engine.loadFromModule("com.myapp", "Main");
+	// return app.exec();
+	// serverThread.join();
 
 	return 0;
 }

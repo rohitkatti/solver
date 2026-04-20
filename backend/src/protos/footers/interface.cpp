@@ -1,3 +1,5 @@
+#include "geometry/interface.hpp"
+#include "utilities/services.hpp"
 #include <protos/interface.hpp>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -16,6 +18,9 @@ namespace Protos {
 		grpc::ServerBuilder builder;
 		builder.AddListeningPort(server_address,
 		                         grpc::InsecureServerCredentials());
+
+		Geometry::AddServices(builder);
+		Utilities::AddServices(builder);
 
 		std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
 		if (!server) {

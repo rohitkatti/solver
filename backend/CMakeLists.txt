@@ -138,33 +138,33 @@ find_package(Doxygen)
 # =============================================================================
 # PROTO LIBRARY
 # =============================================================================
-file(GLOB_RECURSE PROTO_GENERATED_SOURCES
-    CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/protos/*.cc"
-)
+# file(GLOB_RECURSE PROTO_GENERATED_SOURCES
+# CONFIGURE_DEPENDS
+# "${CMAKE_CURRENT_SOURCE_DIR}/src/protos/*.cc"
+# )
 
-if(PROTO_GENERATED_SOURCES)
-    add_library(project_proto STATIC ${PROTO_GENERATED_SOURCES})
-    target_include_directories(project_proto PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/protos
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    target_link_libraries(project_proto PUBLIC
-        gRPC::grpc++
-        protobuf::libprotobuf
-    )
-    target_compile_definitions(project_proto PRIVATE
-        PROTOBUF_USE_DLLS
-        ABSL_MIN_LOG_LEVEL=100
-        GOOGLE_PROTOBUF_NO_LOGGING
-    )
-else()
-    message(WARNING
-        "No generated proto sources found in backend/src/protos/. "
-        "Run scripts/gen_proto.sh before configuring."
-    )
-    add_library(project_proto INTERFACE)
-endif()
+# if(PROTO_GENERATED_SOURCES)
+# add_library(project_proto STATIC ${PROTO_GENERATED_SOURCES})
+# target_include_directories(project_proto PUBLIC
+# ${CMAKE_CURRENT_SOURCE_DIR}/src/protos
+# ${CMAKE_CURRENT_SOURCE_DIR}/src
+# )
+# target_link_libraries(project_proto PUBLIC
+# gRPC::grpc++
+# protobuf::libprotobuf
+# )
+# target_compile_definitions(project_proto PRIVATE
+# PROTOBUF_USE_DLLS
+# ABSL_MIN_LOG_LEVEL=100
+# GOOGLE_PROTOBUF_NO_LOGGING
+# )
+# else()
+# message(WARNING
+# "No generated proto sources found in backend/src/protos/. "
+# "Run scripts/gen_proto.sh before configuring."
+# )
+# add_library(project_proto INTERFACE)
+# endif()
 
 # =============================================================================
 # HELPER: AUTO LIBRARY CREATION
@@ -179,6 +179,7 @@ function(add_auto_library)
     file(GLOB_RECURSE SOURCES
         CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/${ARG_NAME}/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/${ARG_NAME}/*.cc
     )
 
     if(SOURCES)
@@ -212,29 +213,33 @@ endfunction()
 # LIBRARIES  (uncomment as you add source files)
 # =============================================================================
 add_auto_library(NAME utilities
-    LIBS CLI11::CLI11 rang
+    LIBS CLI11::CLI11 rang gRPC::grpc++ protobuf::libprotobuf
 )
 set_target_properties(utilities PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 add_auto_library(NAME protos
-    LIBS project_proto
+    LIBS
+    gRPC::grpc++
+    gRPC::grpc++_reflection
+    protobuf::libprotobuf
+    geometry
+    dynamics
 )
 
 add_auto_library(NAME geometry
-    LIBS CGAL::CGAL project_proto
+    LIBS
+    CGAL::CGAL
+    gRPC::grpc++
+    protobuf::libprotobuf
 )
 
 add_auto_library(NAME dynamics
-    LIBS Eigen3_headers rbdl project_proto
+    LIBS
+    Eigen3_headers
+    rbdl
+    gRPC::grpc++
+    protobuf::libprotobuf
 )
-
-# add_auto_library(NAME commands
-# LIBS geometry dynamics
-# LINKING SHARED
-# )
-# add_auto_library(NAME service
-# LIBS gRPC::grpc++ project_proto commands
-# )
 
 # =============================================================================
 # EXECUTABLE
@@ -243,7 +248,8 @@ add_executable(Workspace src/main.cpp)
 
 target_include_directories(Workspace PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/protos
+
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/protos
     ${EIGEN3_INCLUDE_DIR}
 )
 
@@ -253,14 +259,12 @@ target_link_libraries(Workspace PRIVATE
     Qt6::Qml
     Qt6::Quick
     Qt6::QuickControls2
-    project_proto
     rbdl
     CLI11::CLI11
 
     # my libraries
     utilities
-    dynamics
-    geometry
+    protos
 )
 
 target_compile_options(Workspace PRIVATE
