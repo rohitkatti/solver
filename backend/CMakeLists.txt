@@ -80,6 +80,13 @@ FetchContent_Declare(
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 FetchContent_MakeAvailable(rang)
 
+FetchContent_GetProperties(rang)
+
+if(rang_POPULATED)
+    set_property(DIRECTORY ${rang_SOURCE_DIR}
+        PROPERTY CMAKE_MINIMUM_REQUIRED_VERSION 3.5)
+endif()
+
 set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 
 # ----- RBDL ------------------------------------------------------------------
@@ -244,6 +251,9 @@ target_link_libraries(Workspace PRIVATE
     project_proto
     rbdl
     CLI11::CLI11
+
+    # my libraries
+    utilities
 )
 
 target_compile_options(Workspace PRIVATE

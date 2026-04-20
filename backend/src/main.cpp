@@ -4,6 +4,7 @@
 #include "thread"
 #include "typedefs/dynamics.hpp"
 #include "utilities/interface.hpp"
+#include "utilities/logger.hpp"
 
 void parseArgs(int argc, char *argv[]) {
 	Utilities::Config cfg = Utilities::GetConfig();
@@ -25,9 +26,13 @@ int main(int argc, char **argv) {
 	// engine.loadFromModule("com.myapp", "Main");
 	// return app.exec();
 	parseArgs(argc, argv);
+
 	Utilities::Config cfg = Utilities::GetConfig();
 	cfg.mainThreadId = std::this_thread::get_id();
 	cfg.rbdlVersion = Dynamics::GetRBDLVersion();
+	Utilities::SetConfig(cfg);
+
+	Utilities::FL().Info("\n\nInitialization Done !\n\n");
 
 	return 0;
 }

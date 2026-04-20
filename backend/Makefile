@@ -62,7 +62,8 @@ test: build
 clean:
 	@echo "Cleaning..."
 	@rm -rf $(BUILD_DIR)
-	@rm -rf $(TMP_DIR)
+# 	@rm -rf $(TMP_DIR)
+	@rm -rf $(LOG_DIR)/*.log
 
 # Full rebuild
 rebuild: clean build
