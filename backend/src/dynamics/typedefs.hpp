@@ -1,7 +1,7 @@
 #pragma once
 
-#include "format"
-#include "rbdl/rbdl.h"
+#include <format>
+#include <rbdl/rbdl.h>
 
 using namespace RigidBodyDynamics;
 
@@ -13,4 +13,4 @@ namespace Dynamics {
 		int patch = v & 0xFF;
 		return std::format("{}.{}.{}", major, minor, patch);
 	}
-} // namespace Dynamics
+}   //  namespace Dynamics

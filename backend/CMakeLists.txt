@@ -87,7 +87,8 @@ if(rang_POPULATED)
         PROPERTY CMAKE_MINIMUM_REQUIRED_VERSION 3.5)
 endif()
 
-set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
+# set(CGAL_DIR ${cgal_SOURCE_DIR}) # CGAL requires find_package after FetchContent to set up targets correctly
+set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE) # Suppress CGAL debug build warning
 
 # ----- RBDL ------------------------------------------------------------------
 set(RBDL_BUILD_STATIC OFF CACHE BOOL "" FORCE)
@@ -130,6 +131,7 @@ if(NOT PostgreSQL_FOUND)
     message(WARNING "PostgreSQL not found — disabling DB features")
 endif()
 
+find_package(CGAL REQUIRED)
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
 find_package(Doxygen)
 
@@ -210,19 +212,22 @@ endfunction()
 # LIBRARIES  (uncomment as you add source files)
 # =============================================================================
 add_auto_library(NAME utilities
-    LIBS CLI11::CLI11 rang project_proto
-)
-add_auto_library(NAME typedefs
-    LIBS CGAL::CGAL Eigen3::Eigen rbdl
+    LIBS CLI11::CLI11 rang
 )
 set_target_properties(utilities PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-# add_auto_library(NAME geometry
-# LIBS Eigen3_headers project_proto utils
-# )
-# add_auto_library(NAME dynamics
-# LIBS rbdl Eigen3_headers project_proto utils
-# )
+add_auto_library(NAME protos
+    LIBS project_proto
+)
+
+add_auto_library(NAME geometry
+    LIBS CGAL::CGAL project_proto
+)
+
+add_auto_library(NAME dynamics
+    LIBS Eigen3_headers rbdl project_proto
+)
+
 # add_auto_library(NAME commands
 # LIBS geometry dynamics
 # LINKING SHARED
@@ -254,6 +259,8 @@ target_link_libraries(Workspace PRIVATE
 
     # my libraries
     utilities
+    dynamics
+    geometry
 )
 
 target_compile_options(Workspace PRIVATE

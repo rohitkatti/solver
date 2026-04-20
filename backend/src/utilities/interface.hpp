@@ -1,7 +1,7 @@
 #pragma once
 
-#include "string"
-#include "thread"
+#include <string>
+#include <thread>
 
 using namespace std;
 

@@ -1,10 +1,10 @@
-#include "CLI/CLI.hpp"
-#include "QGuiApplication"
-#include "QQmlApplicationEngine"
-#include "thread"
-#include "typedefs/dynamics.hpp"
-#include "utilities/interface.hpp"
-#include "utilities/logger.hpp"
+#include <CLI/CLI.hpp>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <thread>
+#include <dynamics/typedefs.hpp>
+#include <utilities/interface.hpp>
+#include <utilities/logger.hpp>
 
 void parseArgs(int argc, char *argv[]) {
 	Utilities::Config cfg = Utilities::GetConfig();

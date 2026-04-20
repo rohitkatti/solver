@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CGAL/Simple_cartesian.h"
+#include <CGAL/Simple_cartesian.h>
 
 namespace Geometry {
 	using Kernel = CGAL::Simple_cartesian<double>;
@@ -37,5 +37,5 @@ namespace Geometry {
 	inline double SquaredDistance(Point3 p, Point3 q) {
 		return CGAL::squared_distance(p, q);
 	}
-
-} // namespace Geometry
+	
+}   //  namespace Geometry
