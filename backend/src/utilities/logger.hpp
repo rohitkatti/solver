@@ -10,8 +10,10 @@
 using namespace std;
 
 namespace Utilities {
-	const string LOG_FILE_PATH = format("/Users/rohitkatti/github/solver/backend/tmp/logs/{:%Y-%m-%d_%H-%M-%S}.log",
-	                                    chrono::system_clock::now());
+	const string LOG_FILE_PATH =
+	    format("/Users/rohitkatti/github/solver/backend/tmp/logs/"
+	           "{:%Y-%m-%d_%H-%M-%S}.log",
+	           chrono::system_clock::now());
 
 	class ILog {
 		public:

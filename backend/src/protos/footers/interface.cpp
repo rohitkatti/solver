@@ -1,8 +1,8 @@
 #include "geometry/interface.hpp"
 #include "utilities/services.hpp"
-#include <protos/interface.hpp>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
+#include <protos/interface.hpp>
 #include <utilities/logger.hpp>
 
 using namespace Utilities;

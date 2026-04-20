@@ -9,5 +9,5 @@ namespace Utilities {
 		response->clear_healthy();
 		response->set_healthy(true);
 		return grpc::Status::OK;
-                               }
-}
+	}
+} // namespace Utilities

@@ -2,8 +2,8 @@
 
 #include <geometry/generated/v1/geometry.grpc.pb.h>
 #include <geometry/generated/v1/geometry.pb.h>
-#include <grpcpp/server_context.h>
 #include <grpcpp/grpcpp.h>
+#include <grpcpp/server_context.h>
 
 namespace Geometry {
 	class FileServiceImpl final : public geometry::v1::FileService::Service {
@@ -17,8 +17,8 @@ namespace Geometry {
 			    grpc::ServerWriter<geometry::v1::Point> *writer) override;
 	};
 
-	inline void AddServices(grpc::ServerBuilder& builder) {
+	inline void AddServices(grpc::ServerBuilder &builder) {
 		static FileServiceImpl impl;
 		builder.RegisterService(&impl);
-    }
-}   // namespace Geometry
+	}
+} // namespace Geometry

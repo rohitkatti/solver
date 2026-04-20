@@ -1,11 +1,11 @@
 #include <CLI/CLI.hpp>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <thread>
 #include <dynamics/typedefs.hpp>
+#include <protos/interface.hpp>
+#include <thread>
 #include <utilities/interface.hpp>
 #include <utilities/logger.hpp>
-#include <protos/interface.hpp>
 
 void parseArgs(int argc, char *argv[]) {
 	Utilities::Config cfg = Utilities::GetConfig();
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	// std::thread serverThread(svc.RunServer);
 	svc.RunServer();
 
-		// QGuiApplication app(argc, argv);
+	// QGuiApplication app(argc, argv);
 	// QQmlApplicationEngine engine;
 	// engine.loadFromModule("com.myapp", "Main");
 	// return app.exec();

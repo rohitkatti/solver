@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-package health.v1;
+package utilities.v1;
 
 message Response {
   bool healthy = 1;
