@@ -5,13 +5,38 @@
             "name": "Debug Solver (launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/backend/out/Debug/Workspace",
+            "program": "${workspaceFolder}/backend/out/Workspace",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
+        },
+        // {
+        //     "name": "Debug Test (geometry/fileService)",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder}/backend/out/test_geometry_fileService",
+        //     "args": [
+        //         "--gtest_filter=GrpcClientTest.LoadPointsCheck"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}/backend/out",
+        //     "environment": [],
+        //     "externalConsole": false,
+        //     "MIMode": "lldb",
+        //     "preLaunchTask": "start-server"
+        // }
+        {
+            "name": "Debug Test (geometry/fileService)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/out/test_geometry_fileService",
+            "args": [
+                "--gtest_filter=GrpcClientTest.LoadPointsCheck"
+            ],
+            "cwd": "${workspaceFolder}/backend/out"
         }
     ]
 }

@@ -42,6 +42,22 @@
             "problemMatcher": [
                 "$gcc"
             ]
+        },
+        {
+            "label": "start-server",
+            "type": "shell",
+            "command": "${workspaceFolder}/backend/out/Workspace &",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "."
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "listening on"
+                }
+            }
         }
     ]
 }

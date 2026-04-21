@@ -55,6 +55,8 @@ if(NOT eigen_POPULATED)
     FetchContent_Populate(eigen) # download only — no add_subdirectory
 endif()
 
+set(Eigen3_DIR "${eigen_BINARY_DIR}" CACHE PATH "" FORCE)
+
 set(EIGEN3_INCLUDE_DIR ${eigen_SOURCE_DIR} CACHE PATH "Eigen3 headers" FORCE)
 message(STATUS "Using fetched Eigen3 from: ${EIGEN3_INCLUDE_DIR}")
 
@@ -136,6 +138,37 @@ find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
 find_package(Doxygen)
 
 # =============================================================================
+# TESTING
+# =============================================================================
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.14.0
+)
+FetchContent_MakeAvailable(googletest)
+
+# Prevent googletest from being found via Homebrew or system paths
+# by creating proper namespaced aliases pointing to our fetched targets
+if(NOT TARGET GTest::gtest)
+    add_library(GTest::gtest ALIAS gtest)
+endif()
+
+if(NOT TARGET GTest::gtest_main)
+    add_library(GTest::gtest_main ALIAS gtest_main)
+endif()
+
+if(APPLE)
+    target_compile_options(gtest PRIVATE -stdlib=libc++)
+    target_compile_options(gtest_main PRIVATE -stdlib=libc++)
+    target_link_options(gtest PRIVATE -stdlib=libc++)
+    target_link_options(gtest_main PRIVATE -stdlib=libc++)
+endif()
+
+include(GoogleTest)
+enable_testing()
+
+# =============================================================================
 # PROTO LIBRARY
 # =============================================================================
 # file(GLOB_RECURSE PROTO_GENERATED_SOURCES
@@ -167,7 +200,7 @@ find_package(Doxygen)
 # endif()
 
 # =============================================================================
-# HELPER: AUTO LIBRARY CREATION
+# HELPERS:
 # =============================================================================
 function(add_auto_library)
     cmake_parse_arguments(ARG "" "NAME;LINKING" "LIBS;PRIVATE_LIBS" ${ARGN})
@@ -181,6 +214,9 @@ function(add_auto_library)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/${ARG_NAME}/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/${ARG_NAME}/*.cc
     )
+
+    # Filter out any files that are inside a 'tests' folder
+    list(FILTER SOURCES EXCLUDE REGEX ".*/tests/.*")
 
     if(SOURCES)
         add_library(${ARG_NAME} ${ARG_LINKING} ${SOURCES})
@@ -209,6 +245,47 @@ function(add_auto_library)
     endif()
 endfunction()
 
+function(add_module_tests)
+    cmake_parse_arguments(TEST "" "MODULE" "LIBS" ${ARGN})
+
+    file(GLOB_RECURSE TEST_SOURCES
+        CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/${TEST_MODULE}/tests/*.cpp"
+    )
+
+    foreach(test_file ${TEST_SOURCES})
+        get_filename_component(test_name ${test_file} NAME_WE)
+        set(full_test_name "test_${TEST_MODULE}_${test_name}")
+
+        add_executable(${full_test_name} ${test_file})
+
+        target_link_libraries(${full_test_name}
+            PRIVATE
+            ${TEST_MODULE}
+            ${TEST_LIBS}
+            gtest
+            gtest_main
+        )
+
+        target_compile_features(${full_test_name} PRIVATE cxx_std_20)
+
+        # Match the project-wide stdlib setting on Apple
+        if(APPLE)
+            target_compile_options(${full_test_name} PRIVATE -stdlib=libc++)
+            target_link_options(${full_test_name} PRIVATE -stdlib=libc++)
+        endif()
+
+        target_include_directories(${full_test_name} PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/src"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/${TEST_MODULE}/tests"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/utilities/tests"
+        )
+
+        # gtest_discover_tests(${full_test_name})
+        gtest_discover_tests(${full_test_name} TEST_PREFIX "${full_test_name}.")
+    endforeach()
+endfunction()
+
 # =============================================================================
 # LIBRARIES  (uncomment as you add source files)
 # =============================================================================
@@ -231,6 +308,12 @@ add_auto_library(NAME geometry
     CGAL::CGAL
     gRPC::grpc++
     protobuf::libprotobuf
+)
+
+# Register tests for it
+add_module_tests(
+    MODULE geometry
+    LIBS gRPC::grpc++
 )
 
 add_auto_library(NAME dynamics
@@ -298,12 +381,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         -fsanitize=address,undefined
     )
 endif()
-
-# =============================================================================
-# TESTING
-# =============================================================================
-enable_testing()
-add_subdirectory(tests)
 
 # =============================================================================
 # OPTIONAL DOCS

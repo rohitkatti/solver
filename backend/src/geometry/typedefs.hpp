@@ -1,6 +1,8 @@
 #pragma once
 
 #include <CGAL/Simple_cartesian.h>
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Surface_mesh/Surface_mesh.h>
 
 namespace Geometry {
 	using Kernel = CGAL::Simple_cartesian<double>;
@@ -29,6 +31,8 @@ namespace Geometry {
 	using Circle2 = Kernel::Circle_2;
 	using Circle3 = Kernel::Circle_3;
 	using Sphere3 = Kernel::Sphere_3;
+
+	using SurfaceMesh = CGAL::Surface_mesh<Point3>;
 
 	inline double SquaredDistance(Point2 p, Point2 q) {
 		return CGAL::squared_distance(p, q);

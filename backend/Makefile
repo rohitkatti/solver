@@ -10,18 +10,20 @@ BUILD_TYPE ?= Debug
 # ─────────────────────────────────────────────────────────────
 # Targets
 # ─────────────────────────────────────────────────────────────
-.PHONY: help init configure build run clean test rebuild env-check bootstrap configure
+.PHONY: help init configure build run clean test rebuild env-check bootstrap configure test-all test-one test-module
 
 help:
 	@echo "Available commands:"
-	@echo "  make init       - create folders"
-	@echo "  make configure  - run cmake configure"
-	@echo "  make build      - build project"
-	@echo "  make run      - run project"
-	@echo "  make test       - run tests"
-	@echo "  make clean      - clean build artifacts"
-	@echo "  make rebuild    - clean + build"
-
+	@echo "  make init       	- create folders"
+	@echo "  make configure  	- run cmake configure"
+	@echo "  make build      	- build project"
+	@echo "  make run        	- run project"
+	@echo "  make test       	- run tests"
+	@echo "  make clean      	- clean build artifacts"
+	@echo "  make rebuild    	- clean + build"
+	@echo "  make test-all   	- tests all the tests registered for the project"
+	@echo "  make test-module 	- tests all the registered tests for a particular module i.e. make test-module MODULE=geometry"
+	@echo "  make test-one 		- tests single test i.e. make test-one MODULE=geometry FILE=fileService TEST=GrpcClientTest.LoadPointsCheck"
 env-check:
 	../scripts/env_check.sh
 
@@ -70,3 +72,22 @@ rebuild: clean build
 
 clang-format: ## Format C++ code
 	find src \( -name "*.hpp" -o -name "*.cpp" \) | xargs clang-format -i
+	find tests \( -name "*.hpp" -o -name "*.cpp" \) | xargs clang-format -i
+
+# Run every test via CTest
+test-all:
+	cd out && ctest --output-on-failure -j$(shell nproc 2>/dev/null || sysctl -n hw.logicalcpu)
+
+# Run all tests for a single module
+# Usage: make test-module MODULE=geometry
+test-module:
+	@if [ -z "$(MODULE)" ]; then echo "Usage: make test-module MODULE=<name>"; exit 1; fi
+	cd out && ctest --output-on-failure -R "^test_$(MODULE)_"
+
+# Run a single named test
+# Usage: make test-one MODULE=geometry FILE=fileService TEST=GrpcClientTest.LoadPointsCheck
+test-one:
+	@if [ -z "$(MODULE)" ] || [ -z "$(FILE)" ] || [ -z "$(TEST)" ]; then \
+		echo "Usage: make test-one MODULE=<name> FILE=<filename> TEST=<TestSuite.TestName>"; exit 1; fi
+	cd out && ctest --output-on-failure -R "^test_$(MODULE)_$(FILE)\.$(TEST)$$"
+
